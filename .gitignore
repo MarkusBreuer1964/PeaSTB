@@ -1,0 +1,7 @@
+# Ignore temporary development directories and files ##########################################################
+__pycache__/
+.pytest_cache/
+.coverage
+.venv/
+.vscode/
+dist/

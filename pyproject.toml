@@ -1,0 +1,51 @@
+# General Project Configuration  ######################################################################
+
+[project]
+name = "peastb"
+version = "0.1.0a1"
+description = "PeaSTB - Python Environment Analyzer"
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [ {name ="Markus Breuer", email="markus.breuer@berufskolleg-aachen.de"}]
+keywords = [ "python environment", "analyzer" ]
+package-mode = true
+
+dependencies = [
+    "colorama (>=0.4.0,<0.5.0)",
+    "toml (>=0.10.2,<=0.10.2)"
+]
+
+
+# Poetry Einstellungen  ######################################################################
+
+[project.scripts]
+peastb = "pea01_main:main"
+
+[tool.poetry]
+packages = [
+    { include = "*", from = "peastb" }
+]
+
+# Entwicklungsabhängigkeiten ######################################################################
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest =">=9.0.2,<10.0.0"
+black = ">=26.1.0,<27.0.0"
+flake8 = ">=7.3.0,<8.0.0"
+pylint = ">=4.0.5,<5.0.0"
+
+# Build Einstellungen #################################################################################
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# Werkzeug Einstellungen #################################################################################
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

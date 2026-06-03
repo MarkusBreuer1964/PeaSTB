@@ -1,0 +1,4 @@
+# sample package list
+sys
+colorama
+non_existing_demo_package
