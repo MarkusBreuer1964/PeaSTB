@@ -4,6 +4,11 @@ from datetime import datetime
 import getpass
 import socket
 
+try:
+    from . import version
+except ImportError:
+    import version
+
 
 def determine_title_information(title):
     """Return title metadata used in reports."""
@@ -12,6 +17,8 @@ def determine_title_information(title):
         "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "computer_name": socket.gethostname(),
         "user_name": getpass.getuser(),
+        "peastb_version": version.PEASTB_VERSION,
+        "peastb_version_date": version.PEASTB_VERSION_DATE,
     }
     return title_information
 
@@ -24,6 +31,12 @@ def create_introduction_section(title_information):
             "Date": title_information["date"],
             "Computer name": title_information["computer_name"],
             "User name": title_information["user_name"],
+            "PeaSTB version": title_information.get(
+                "peastb_version", version.PEASTB_VERSION
+            ),
+            "PeaSTB Version Date": title_information.get(
+                "peastb_version_date", version.PEASTB_VERSION_DATE
+            ),
         },
     }
 

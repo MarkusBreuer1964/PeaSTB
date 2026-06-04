@@ -1,6 +1,6 @@
 """pea01_main.py - CLI-Interface for Python Environment Analyzer (PeaSTB)
 Name, Organisaion:          Markus Breuer, STMB
-Erstellt, Letzte Änderung:  30.05.2026, 31.05.2026
+Erstellt, Letzte Änderung:  30.05.2026, 04.06.2026
 """
 
 import sys
@@ -18,7 +18,7 @@ def analyze(include_environment=False, packagefile=None):
     if include_environment:
         report_sections.extend(analyzer.analyze_environment())
 
-    if packagefile:
+    if include_environment or packagefile:
         report_sections.extend(package_check.run_package_check(packagefile=packagefile))
 
     return report_sections

@@ -7,9 +7,10 @@ def test_run_package_check_returns_detail_and_summary_sections(tmp_path):
 
     sections = package_check.run_package_check(str(package_file))
 
-    assert len(sections) == 2
+    assert len(sections) == 3
     detail_section = sections[0]
     summary_section = sections[1]
+    installed_packages_section = sections[2]
 
     assert detail_section["title"] == "Package Import Check"
     assert detail_section["content"]["sys"] == "successful"
@@ -18,6 +19,12 @@ def test_run_package_check_returns_detail_and_summary_sections(tmp_path):
     assert summary_section["title"] == "Package Import Summary"
     assert summary_section["content"]["Successful Imports"] == 1
     assert summary_section["content"]["Failed Imports"] == 1
+
+    assert installed_packages_section["title"] == "Installed Packages"
+    assert len(installed_packages_section["content"]) > 0
+
+    first_value = next(iter(installed_packages_section["content"].values()))
+    assert " -> " in first_value
 
 
 def test_load_package_list_raises_for_empty_file(tmp_path):
@@ -29,3 +36,16 @@ def test_load_package_list_raises_for_empty_file(tmp_path):
         assert False, "ValueError expected"
     except ValueError as exc:
         assert "does not contain any packages" in str(exc)
+
+
+def test_run_package_check_without_packagefile_returns_installed_packages_section():
+    sections = package_check.run_package_check()
+
+    assert len(sections) == 1
+    installed_packages_section = sections[0]
+
+    assert installed_packages_section["title"] == "Installed Packages"
+    assert len(installed_packages_section["content"]) > 0
+
+    first_value = next(iter(installed_packages_section["content"].values()))
+    assert " -> " in first_value
