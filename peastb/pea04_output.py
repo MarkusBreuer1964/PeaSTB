@@ -3,11 +3,15 @@
 from datetime import datetime
 import getpass
 import socket
+import logging
 
 try:
     from . import version
 except ImportError:
     import version
+
+
+logger = logging.getLogger(__name__)
 
 
 def determine_title_information(title):
@@ -70,3 +74,4 @@ def emit_report(report, outputfile=None, outputfileonly=False):
     if outputfile:
         with open(outputfile, "w", encoding="utf-8") as file:
             file.write(report)
+        logger.info("Analysis report written to output file: %s", outputfile)

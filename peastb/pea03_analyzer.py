@@ -8,34 +8,50 @@ import site
 import sys
 import shutil
 import subprocess
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+
+def _append_section(sections, section_factory):
+    """Create a section, append it, and continue on errors."""
+    try:
+        section = section_factory()
+        sections.append(section)
+        logger.info("Section created: %s", section.get("title", "Unknown section"))
+    except Exception:
+        logger.exception("Section could not be created: %s", section_factory.__name__)
 
 
 def analyze_environment():
     """Collect environment data and return it as section dictionaries."""
     pip_paths_info = determine_pip_paths()
-    sections = [
-        create_operating_system_section(),
-        create_used_python_section(),
-        create_environment_paths_section(),
-        create_pip_paths_section(),
-        create_versions_section(pip_paths_info),
-        create_module_search_paths_section(),
-        create_site_packages_section(),
-        create_virtual_environment_section(),
-    ]
+    sections = []
+    _append_section(sections, create_operating_system_section)
+    _append_section(sections, create_used_python_section)
+    _append_section(sections, create_environment_paths_section)
+    _append_section(sections, create_pip_paths_section)
+    _append_section(sections, lambda: create_versions_section(pip_paths_info))
+    _append_section(sections, create_module_search_paths_section)
+    _append_section(sections, create_site_packages_section)
+    _append_section(sections, create_user_site_packages_section)
+    _append_section(sections, create_virtual_environment_section)
     return sections
 
 
 def get_cmd_output(cmd):
     """Run a command and return its combined output."""
+    logger.debug("OS command call: %s", " ".join(cmd))
     try:
         result = subprocess.run(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
         )
         output = result.stdout.strip()
         return output
-    except Exception as e:
-        error_message = f"Error while running {' '.join(cmd)}: {e}"
+    except Exception:
+        logger.exception("Failed OS command call: %s", " ".join(cmd))
+        error_message = f"Error while running {' '.join(cmd)}"
         return error_message
 
 
@@ -53,7 +69,7 @@ def create_operating_system_section():
     """Return the operating system section."""
     content = determine_operating_system()
     section = {
-        "title": "Operating System Information",
+        "title": "Operating System Information (platform)",
         "content": content,
     }
     return section
@@ -63,7 +79,7 @@ def create_used_python_section():
     """Return the used Python section."""
     content = determine_used_python()
     section = {
-        "title": "Used Python Information",
+        "title": "Used Python Information (sys.executable, platform.python_version)",
         "content": content,
     }
     return section
@@ -73,7 +89,7 @@ def create_pip_paths_section():
     """Return the pip paths section."""
     content = determine_pip_paths()
     section = {
-        "title": "Pip Executable Paths",
+        "title": "Pip Executable Paths (shutil.which)",
         "content": content,
     }
     return section
@@ -83,7 +99,7 @@ def create_environment_paths_section():
     """Return the environment paths section."""
     content = determine_environment_paths()
     section = {
-        "title": "Environment Paths",
+        "title": "Environment Paths (which/where)",
         "content": content,
     }
     return section
@@ -93,7 +109,7 @@ def create_versions_section(pip_paths_info):
     """Return the versions section."""
     content = determine_versions(pip_paths_info)
     section = {
-        "title": "Version Information",
+        "title": "Version Information (--version)",
         "content": content,
     }
     return section
@@ -103,7 +119,7 @@ def create_module_search_paths_section():
     """Return the section with Python module search paths."""
     content = determine_module_search_paths()
     section = {
-        "title": "Module Search Paths",
+        "title": "Module Search Paths (sys.path)",
         "content": content,
     }
     return section
@@ -113,7 +129,17 @@ def create_site_packages_section():
     """Return the section with site-packages paths."""
     content = determine_site_packages_paths()
     section = {
-        "title": "Site Packages Paths",
+        "title": "Site Packages Paths (site.getsitepackages)",
+        "content": content,
+    }
+    return section
+
+
+def create_user_site_packages_section():
+    """Return the section with user site-packages paths."""
+    content = determine_user_site_packages_paths()
+    section = {
+        "title": "User Site Packages Paths (site.getusersitepackages)",
         "content": content,
     }
     return section
@@ -123,7 +149,7 @@ def create_virtual_environment_section():
     """Return the section with virtual environment status."""
     content = determine_virtual_environment()
     section = {
-        "title": "Virtual Environment Status",
+        "title": "Virtual Environment Status (sys.prefix vs sys.base_prefix)",
         "content": content,
     }
     return section
@@ -246,6 +272,25 @@ def determine_site_packages_paths():
         }
 
     return site_packages_paths
+
+
+def determine_user_site_packages_paths():
+    """Return path reported by site.getusersitepackages()."""
+    try:
+        user_site_packages = site.getusersitepackages()
+    except Exception:
+        user_site_packages = None
+
+    if user_site_packages:
+        user_site_packages_paths = {
+            "User Site Package Path": user_site_packages,
+        }
+    else:
+        user_site_packages_paths = {
+            "User Site Package Path": "Not available",
+        }
+
+    return user_site_packages_paths
 
 
 def determine_virtual_environment():
