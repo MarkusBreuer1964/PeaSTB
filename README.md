@@ -28,6 +28,12 @@ If you provide --packagefile, PeaSTB also adds:
 Install from PyPI with pip:
 
 ```bash
+pip install peastb
+```
+
+or
+
+```bash
 python -m pip install peastb
 ```
 
@@ -94,9 +100,17 @@ colorama
 non_existing_demo_package
 ```
 
+A package file tailored to the BK GuT environment is included in the GitHub repository.
+
 ## Version
 
 Current version: 0.1.0a2
+
+## Repository
+
+Source code and project history are available on GitHub:
+
+- https://github.com/MarkusBreuer1964/PeaSTB
 
 ## License
 

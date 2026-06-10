@@ -1,0 +1,35 @@
+# package checklist BK-GuT
+
+# code quality
+black
+flake8
+autopep8
+pylint
+pytest
+
+# systemintegration/automation
+psutil
+pythonping
+
+# databases
+mysql.connector
+questdb
+
+# GUI
+customtkinter
+CTkMessagebox
+
+# data engineering
+matplotlib
+pandas
+numpy
+
+# communication
+paho.mqtt
+
+# electronical interface simulation
+sim_schnittstelle.simulator
+
+# utilities
+colorama
+pipdeptree
