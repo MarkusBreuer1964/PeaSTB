@@ -1,6 +1,6 @@
 """pea03_analyzer.py - Analyzer for Python Environment - Analyzer (PeaSTB)
 Name, Organisation:         Markus Breuer, STMB
-Erstellt, Letzte Änderung:  01.06.2026, 04.06.2026
+Created, Last updated:      01.06.2026, 04.06.2026
 """
 
 import platform
@@ -10,33 +10,24 @@ import shutil
 import subprocess
 import logging
 
+from pea05_utilities import append_section
 
 logger = logging.getLogger(__name__)
-
-
-def _append_section(sections, section_factory):
-    """Create a section, append it, and continue on errors."""
-    try:
-        section = section_factory()
-        sections.append(section)
-        logger.info("Section created: %s", section.get("title", "Unknown section"))
-    except Exception:
-        logger.exception("Section could not be created: %s", section_factory.__name__)
 
 
 def analyze_environment():
     """Collect environment data and return it as section dictionaries."""
     pip_paths_info = determine_pip_paths()
     sections = []
-    _append_section(sections, create_operating_system_section)
-    _append_section(sections, create_used_python_section)
-    _append_section(sections, create_environment_paths_section)
-    _append_section(sections, create_pip_paths_section)
-    _append_section(sections, lambda: create_versions_section(pip_paths_info))
-    _append_section(sections, create_module_search_paths_section)
-    _append_section(sections, create_site_packages_section)
-    _append_section(sections, create_user_site_packages_section)
-    _append_section(sections, create_virtual_environment_section)
+    append_section(sections, create_operating_system_section, logger)
+    append_section(sections, create_used_python_section, logger)
+    append_section(sections, create_environment_paths_section, logger)
+    append_section(sections, create_pip_paths_section, logger)
+    append_section(sections, lambda: create_versions_section(pip_paths_info), logger)
+    append_section(sections, create_module_search_paths_section, logger)
+    append_section(sections, create_site_packages_section, logger)
+    append_section(sections, create_user_site_packages_section, logger)
+    append_section(sections, create_virtual_environment_section, logger)
     return sections
 
 
@@ -44,9 +35,7 @@ def get_cmd_output(cmd):
     """Run a command and return its combined output."""
     logger.debug("OS command call: %s", " ".join(cmd))
     try:
-        result = subprocess.run(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
-        )
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, check=False)
         output = result.stdout.strip()
         return output
     except Exception:
@@ -248,9 +237,7 @@ def determine_versions(pip_paths_info):
 
 def determine_module_search_paths():
     """Return Python's module search paths from sys.path."""
-    module_search_paths = {
-        f"Path {index + 1}": path for index, path in enumerate(sys.path)
-    }
+    module_search_paths = {f"Path {index + 1}": path for index, path in enumerate(sys.path)}
     return module_search_paths
 
 
@@ -261,10 +248,7 @@ def determine_site_packages_paths():
     except Exception:
         site_packages = []
 
-    site_packages_paths = {
-        f"Site Package Path {index + 1}": path
-        for index, path in enumerate(site_packages)
-    }
+    site_packages_paths = {f"Site Package Path {index + 1}": path for index, path in enumerate(site_packages)}
 
     if not site_packages_paths:
         site_packages_paths = {

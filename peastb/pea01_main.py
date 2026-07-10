@@ -1,6 +1,6 @@
 """pea01_main.py - CLI-Interface for Python Environment Analyzer (PeaSTB)
-Name, Organisaion:          Markus Breuer, STMB
-Erstellt, Letzte Änderung:  30.05.2026, 10.06.2026
+Name, Organisation:         Markus Breuer, STMB
+Created, Last updated:      30.05.2026, 10.06.2026
 """
 
 import sys
@@ -10,7 +10,6 @@ import pea03_analyzer as analyzer
 import pea02_package_check as package_check
 import pea04_output as output_service
 import version
-
 
 logger = logging.getLogger(__name__)
 
@@ -51,9 +50,7 @@ def main():
         action="store_true",
         help="Shows the current version fo the Python Environment Analyzer.",
     )
-    parser.add_argument(
-        "--analyze", action="store_true", help="Analyzes the Python Environment."
-    )
+    parser.add_argument("--analyze", action="store_true", help="Analyzes the Python Environment.")
     parser.add_argument(
         "--outputfile",
         type=str,
@@ -111,9 +108,7 @@ def main():
                 )
                 parser.error(f"Package file not found: {args.packagefile}")
             except ValueError as exc:
-                logger.exception(
-                    "Program terminated early because package file could not be processed."
-                )
+                logger.exception("Program terminated early because package file could not be processed.")
                 parser.error(str(exc))
         elif args.packagefile:
             action_executed = True
@@ -126,15 +121,11 @@ def main():
                 )
                 parser.error(f"Package file not found: {args.packagefile}")
             except ValueError as exc:
-                logger.exception(
-                    "Program terminated early because package file could not be processed."
-                )
+                logger.exception("Program terminated early because package file could not be processed.")
                 parser.error(str(exc))
 
         if report_sections:
-            title_information = output_service.determine_title_information(
-                "Python Environment Analyzer (PeaSTB)"
-            )
+            title_information = output_service.determine_title_information("Python Environment Analyzer (PeaSTB)")
             report = output_service.build_report(title_information, report_sections)
             output_service.emit_report(
                 report,

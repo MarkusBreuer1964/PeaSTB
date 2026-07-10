@@ -1,7 +1,13 @@
+"""test_package_check.py - Tests for peastb.pea02_package_check
+Name, Organisation:         Markus Breuer, STMB
+Created, Last updated:      12.06.2026, 12.06.2026
+"""
+
 import peastb.pea02_package_check as package_check
 
 
 def test_run_package_check_returns_detail_and_summary_sections(tmp_path):
+    """run_package_check returns detail, summary, and installed-packages sections for a given package file."""
     package_file = tmp_path / "packages.txt"
     package_file.write_text("sys\nthis_package_should_not_exist_123\n", encoding="utf-8")
 
@@ -28,6 +34,7 @@ def test_run_package_check_returns_detail_and_summary_sections(tmp_path):
 
 
 def test_load_package_list_raises_for_empty_file(tmp_path):
+    """load_package_list_from_file raises ValueError when the file contains no packages."""
     package_file = tmp_path / "packages.txt"
     package_file.write_text("# comment only\n\n", encoding="utf-8")
 
@@ -39,6 +46,7 @@ def test_load_package_list_raises_for_empty_file(tmp_path):
 
 
 def test_run_package_check_without_packagefile_returns_installed_packages_section():
+    """run_package_check without a package file returns only the installed-packages section."""
     sections = package_check.run_package_check()
 
     assert len(sections) == 1

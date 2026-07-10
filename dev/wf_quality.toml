@@ -1,0 +1,9 @@
+[quality]
+line_length = 130
+black_target_version = "py312"
+pylint_disable = ["W0718"]
+
+[paths]
+format = ["peastb", "tests", "dev"]
+lint = ["peastb", "tests", "dev"]
+test = ["tests"]

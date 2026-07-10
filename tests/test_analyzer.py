@@ -1,7 +1,13 @@
+"""test_analyzer.py - Tests for peastb.pea03_analyzer
+Name, Organisation:         Markus Breuer, STMB
+Created, Last updated:      12.06.2026, 12.06.2026
+"""
+
 import peastb.pea03_analyzer as analyzer
 
 
 def test_analyze_environment_returns_sections():
+    """analyze_environment returns a list of 9 sections with the expected titles."""
     sections = analyzer.analyze_environment()
 
     assert isinstance(sections, list)
@@ -20,6 +26,7 @@ def test_analyze_environment_returns_sections():
 
 
 def test_used_python_section_shape():
+    """create_used_python_section returns a section with the expected title and keys."""
     section = analyzer.create_used_python_section()
 
     assert section["title"] == "Used Python Information (sys.executable, platform.python_version)"
@@ -28,6 +35,7 @@ def test_used_python_section_shape():
 
 
 def test_environment_paths_section_shape():
+    """create_environment_paths_section returns a section with Python and pip path keys."""
     section = analyzer.create_environment_paths_section()
 
     assert section["title"] == "Environment Paths (which/where)"
@@ -38,6 +46,7 @@ def test_environment_paths_section_shape():
 
 
 def test_module_search_paths_section_shape():
+    """create_module_search_paths_section returns a non-empty section."""
     section = analyzer.create_module_search_paths_section()
 
     assert section["title"] == "Module Search Paths (sys.path)"
@@ -45,6 +54,7 @@ def test_module_search_paths_section_shape():
 
 
 def test_site_packages_section_shape():
+    """create_site_packages_section returns a non-empty section."""
     section = analyzer.create_site_packages_section()
 
     assert section["title"] == "Site Packages Paths (site.getsitepackages)"
@@ -52,6 +62,7 @@ def test_site_packages_section_shape():
 
 
 def test_virtual_environment_section_shape():
+    """create_virtual_environment_section returns a section with the expected keys."""
     section = analyzer.create_virtual_environment_section()
 
     assert section["title"] == "Virtual Environment Status (sys.prefix vs sys.base_prefix)"
@@ -61,6 +72,7 @@ def test_virtual_environment_section_shape():
 
 
 def test_user_site_packages_section_shape():
+    """create_user_site_packages_section returns a section with a user site package path key."""
     section = analyzer.create_user_site_packages_section()
 
     assert section["title"] == "User Site Packages Paths (site.getusersitepackages)"

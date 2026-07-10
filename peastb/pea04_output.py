@@ -1,4 +1,7 @@
-"""pea04_output.py - Output Service for Python Environment Analyzer (PeaSTB)."""
+"""pea04_output.py - Output Service for Python Environment Analyzer (PeaSTB)
+Name, Organisation:         Markus Breuer, STMB
+Created, Last updated:      12.06.2026, 12.06.2026
+"""
 
 from datetime import datetime
 import getpass
@@ -35,12 +38,8 @@ def create_introduction_section(title_information):
             "Date": title_information["date"],
             "Computer name": title_information["computer_name"],
             "User name": title_information["user_name"],
-            "PeaSTB version": title_information.get(
-                "peastb_version", version.PEASTB_VERSION
-            ),
-            "PeaSTB Version Date": title_information.get(
-                "peastb_version_date", version.PEASTB_VERSION_DATE
-            ),
+            "PeaSTB version": title_information.get("peastb_version", version.PEASTB_VERSION),
+            "PeaSTB Version Date": title_information.get("peastb_version_date", version.PEASTB_VERSION_DATE),
         },
     }
 

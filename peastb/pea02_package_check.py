@@ -1,7 +1,8 @@
 """pea02_analyzer.py - Analyzer for Python Environment (PeaSTB) - Package Checker
 Name, Organisation:         Markus Breuer, STMB
-Erstellt, Letzte Änderung:  31.06.2026, 04.06.2026
+Created, Last updated:      31.06.2026, 04.06.2026
 """
+
 import importlib
 import json
 import logging
@@ -9,18 +10,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+from pea05_utilities import append_section
 
 logger = logging.getLogger(__name__)
-
-
-def _append_section(sections, section_factory):
-    """Create a section, append it, and continue on errors."""
-    try:
-        section = section_factory()
-        sections.append(section)
-        logger.info("Section created: %s", section.get("title", "Unknown section"))
-    except Exception:
-        logger.exception("Section could not be created: %s", section_factory.__name__)
 
 
 def run_package_check(packagefile=None):
@@ -31,23 +23,27 @@ def run_package_check(packagefile=None):
     if packagefile:
         package_list = load_package_list_from_file(packagefile)
         import_results = check_package_imports(package_list)
-        _append_section(
+        append_section(
             sections,
             lambda: create_package_imports_section(import_results),
+            logger,
         )
-        _append_section(
+        append_section(
             sections,
             lambda: create_package_summary_section(import_results),
+            logger,
         )
-        _append_section(
+        append_section(
             sections,
             lambda: create_installed_packages_section(installed_packages),
+            logger,
         )
         return sections
 
-    _append_section(
+    append_section(
         sections,
         lambda: create_installed_packages_section(installed_packages),
+        logger,
     )
     return sections
 
@@ -57,11 +53,7 @@ def load_package_list_from_file(packagefile):
     packagefile_path = Path(packagefile)
     logger.info("Loading packages to check from file: %s", packagefile)
     with packagefile_path.open("r", encoding="utf-8") as file:
-        packages = [
-            line.strip()
-            for line in file
-            if line.strip() and not line.lstrip().startswith("#")
-        ]
+        packages = [line.strip() for line in file if line.strip() and not line.lstrip().startswith("#")]
     if not packages:
         raise ValueError("The provided package file does not contain any packages.")
     return packages
@@ -89,6 +81,7 @@ def list_installed_packages():
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
+            check=False,
         )
     except Exception:
         logger.exception("Failed to run OS command for installed package listing.")
@@ -129,12 +122,8 @@ def create_package_imports_section(import_results):
 
 def create_package_summary_section(import_results):
     """Return the summary section for the import results."""
-    successful_imports = sum(
-        1 for result in import_results.values() if result == "successful"
-    )
-    failed_imports = sum(
-        1 for result in import_results.values() if result == "not successful"
-    )
+    successful_imports = sum(1 for result in import_results.values() if result == "successful")
+    failed_imports = sum(1 for result in import_results.values() if result == "not successful")
     content = {
         "Successful Imports": successful_imports,
         "Failed Imports": failed_imports,

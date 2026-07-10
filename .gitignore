@@ -5,6 +5,8 @@ __pycache__/
 .venv/
 .vscode/
 dist/
+.tox
 
 # Ignore log files ##########################################################
 *.log
+test_report.txt

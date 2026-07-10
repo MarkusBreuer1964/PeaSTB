@@ -1,7 +1,13 @@
+"""test_output.py - Tests for peastb.pea04_output
+Name, Organisation:         Markus Breuer, STMB
+Created, Last updated:      12.06.2026, 12.06.2026
+"""
+
 import peastb.pea04_output as output_service
 
 
 def test_build_report_includes_intro_and_sections():
+    """build_report includes title, metadata, and section content in the output."""
     title_information = {
         "title": "Python Environment Analyzer (PeaSTB)",
         "date": "2026-06-03 20:00:00",
