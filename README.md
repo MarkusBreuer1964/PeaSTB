@@ -104,7 +104,7 @@ A package file tailored to the BK GuT environment is included in the GitHub repo
 
 ## Version
 
-Current version: 0.1.0a3
+Current version: 0.1.0a4
 
 ## Repository
 

@@ -57,6 +57,7 @@ def readme_version_aktualisieren(version):
     else:
         print("2. Hinweis: Keine Versionszeile in README.md gefunden.")
 
+
 def tox_ini_version_aktualisieren(version):
     """Update the PACKAGE_VERSION line in tox.ini."""
     tox_pfad = "tox.ini"
@@ -80,6 +81,7 @@ def tox_ini_version_aktualisieren(version):
         print(f"3. tox.ini Version auf {version} aktualisiert.")
     else:
         print("3. Hinweis: Keine PACKAGE_VERSION-Zeile in tox.ini gefunden.")
+
 
 if __name__ == "__main__":
     hauptprogramm()

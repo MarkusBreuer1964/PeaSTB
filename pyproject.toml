@@ -2,7 +2,7 @@
 
 [project]
 name = "peastb"
-version = "0.1.0a3"
+version = "0.1.0a4"
 description = "PeaSTB - Python Environment Analyzer"
 license = "MIT"
 readme = "README.md"
